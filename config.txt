@@ -1,0 +1,26 @@
+# System configuration
+system.ping_file=/srv/UPTIMEDRIVE/pispi.txt
+system.rf_channel_file=/home/pi/channel.txt
+system.log_directory=/srv/UPTIMEDRIVE/logs
+
+# Session configuration
+session.nodelist_directory=/srv/UPTIMEDRIVE/nodelist
+
+# ============================================================================
+# Config File Broadcasting Settings
+# ============================================================================
+config_files_directory=/srv/UPTIMEDRIVE/commands
+config_broadcast_interval_hours=8
+
+# ============================================================================
+# Output File Settings
+# ============================================================================
+output.root_filehandler=/home/pi/echo_wifi_backhaul/filehandler
+ts1_data_files=/srv/UPTIMEDRIVE/UpCastCM/ts1_data_files
+
+# ============================================================================
+# TS1X Sampling Configuration File
+# ============================================================================
+ts1x_sampling_file=/srv/UPTIMEDRIVE/wvsh/api_ts1x_sampling.txt
+sampleset_database_file=/srv/UPTIMEDRIVE/wvsh/sampleset_times.txt
+

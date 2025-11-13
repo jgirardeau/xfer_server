@@ -1,0 +1,302 @@
+diff --git a/main.cpp b/main.cpp
+index 223f311..7292a08 100644
+--- a/main.cpp
++++ b/main.cpp
+@@ -27,6 +27,7 @@
+ #include "pi_server_sleep.h"
+ #include "buffer_constants.h"
+ #include "SamplesetSupervisor.h"
++#include "MainLoopConstants.h"
+ 
+ using namespace std;
+ 
+@@ -152,26 +153,36 @@ static bool validate_config(const ConfigManager& cfg) {
+     if (!file_exists_readable(rf_chan_file)) {
+         LOG_WARN("system.rf_channel_file not readable: %s", rf_chan_file.c_str());
+     }
+-    if (radio_sec < 10 || radio_sec > 604800) {
+-        LOG_ERROR("system.radio_check_period_seconds=%d out of range [10..604800]", radio_sec); ok = false;
++    if (radio_sec < RADIO_CHECK_MIN_SEC || radio_sec > RADIO_CHECK_MAX_SEC) {
++        LOG_ERROR("system.radio_check_period_seconds=%d out of range [%d..%d]", 
++                  radio_sec, RADIO_CHECK_MIN_SEC, RADIO_CHECK_MAX_SEC); 
++        ok = false;
+     }
+-    if (pi_buf_sz < 1024 || pi_buf_sz > (8*1024*1024)) {
+-        LOG_ERROR("system.pi_buffer_size=%d out of range [1024..8388608]", pi_buf_sz); ok = false;
++    if (pi_buf_sz < PI_BUFFER_MIN_SIZE || pi_buf_sz > PI_BUFFER_MAX_SIZE) {
++        LOG_ERROR("system.pi_buffer_size=%d out of range [%d..%d]", 
++                  pi_buf_sz, PI_BUFFER_MIN_SIZE, PI_BUFFER_MAX_SIZE); 
++        ok = false;
+     } else if (!is_power_of_two(pi_buf_sz)) {
+         LOG_WARN("system.pi_buffer_size=%d not a power of two (ring buffers faster with pow2)", pi_buf_sz);
+     }
+-    if (cmd_buf_sz < 1 || cmd_buf_sz > 4096) {
+-        LOG_ERROR("system.command_buffer_size=%d out of range [1..4096]", cmd_buf_sz); ok = false;
++    if (cmd_buf_sz < CMD_BUFFER_MIN_SIZE || cmd_buf_sz > CMD_BUFFER_MAX_SIZE) {
++        LOG_ERROR("system.command_buffer_size=%d out of range [%d..%d]", 
++                  cmd_buf_sz, CMD_BUFFER_MIN_SIZE, CMD_BUFFER_MAX_SIZE); 
++        ok = false;
+     }
+ 
+     // uart.*
+     const int timer_us = cfg.get("uart.timer_interval_us", 5000);
+     const int loop_us  = cfg.get("uart.main_loop_delay_us", 10000);
+-    if (timer_us < 100 || timer_us > 1'000'000) {
+-        LOG_ERROR("uart.timer_interval_us=%d out of range [100..1000000]", timer_us); ok = false;
++    if (timer_us < TIMER_INTERVAL_MIN_US || timer_us > TIMER_INTERVAL_MAX_US) {
++        LOG_ERROR("uart.timer_interval_us=%d out of range [%d..%d]", 
++                  timer_us, TIMER_INTERVAL_MIN_US, TIMER_INTERVAL_MAX_US); 
++        ok = false;
+     }
+-    if (loop_us < 0 || loop_us > 1'000'000) {
+-        LOG_ERROR("uart.main_loop_delay_us=%d out of range [0..1000000]", loop_us); ok = false;
++    if (loop_us < LOOP_DELAY_MIN_US || loop_us > LOOP_DELAY_MAX_US) {
++        LOG_ERROR("uart.main_loop_delay_us=%d out of range [%d..%d]", 
++                  loop_us, LOOP_DELAY_MIN_US, LOOP_DELAY_MAX_US); 
++        ok = false;
+     }
+ 
+     // Config broadcasting parameters
+@@ -183,90 +194,46 @@ static bool validate_config(const ConfigManager& cfg) {
+     const int power_adjust = cfg.get("poweradjust", 0);
+     const int broadcast_interval = cfg.get("config_broadcast_interval_hours", BROADCAST_INTERVAL);
+ 
+-    if (rssi_threshold < -128 || rssi_threshold > 127) {
+-        LOG_ERROR("global_mistlx_rssi_threshold=%d out of range [-128..127]", rssi_threshold); ok = false;
++    if (rssi_threshold < RSSI_THRESHOLD_MIN || rssi_threshold > RSSI_THRESHOLD_MAX) {
++        LOG_ERROR("global_mistlx_rssi_threshold=%d out of range [%d..%d]", 
++                  rssi_threshold, RSSI_THRESHOLD_MIN, RSSI_THRESHOLD_MAX); 
++        ok = false;
+     }
+-    if (rssi_delay < 0 || rssi_delay > 255) {
+-        LOG_ERROR("global_mistlx_rssi_delay=%d out of range [0..255]", rssi_delay); ok = false;
++    if (rssi_delay < RSSI_PARAM_MIN || rssi_delay > RSSI_PARAM_MAX) {
++        LOG_ERROR("global_mistlx_rssi_delay=%d out of range [%d..%d]", 
++                  rssi_delay, RSSI_PARAM_MIN, RSSI_PARAM_MAX); 
++        ok = false;
+     }
+-    if (rssi_increment < 0 || rssi_increment > 255) {
+-        LOG_ERROR("global_mistlx_rssi_increment=%d out of range [0..255]", rssi_increment); ok = false;
++    if (rssi_increment < RSSI_PARAM_MIN || rssi_increment > RSSI_PARAM_MAX) {
++        LOG_ERROR("global_mistlx_rssi_increment=%d out of range [%d..%d]", 
++                  rssi_increment, RSSI_PARAM_MIN, RSSI_PARAM_MAX); 
++        ok = false;
+     }
+-    if (power_adjust < 0 || power_adjust > 255) {
+-        LOG_ERROR("poweradjust=%d out of range [0..255]", power_adjust); ok = false;
++    if (power_adjust < RSSI_PARAM_MIN || power_adjust > RSSI_PARAM_MAX) {
++        LOG_ERROR("poweradjust=%d out of range [%d..%d]", 
++                  power_adjust, RSSI_PARAM_MIN, RSSI_PARAM_MAX); 
++        ok = false;
+     }
+-    if (broadcast_interval < 1 || broadcast_interval > 168) {
+-        LOG_ERROR("config_broadcast_interval_hours=%d out of range [1..168]", broadcast_interval); ok = false;
++    if (broadcast_interval < BROADCAST_INTERVAL_MIN_HOURS || broadcast_interval > BROADCAST_INTERVAL_MAX_HOURS) {
++        LOG_ERROR("config_broadcast_interval_hours=%d out of range [%d..%d]", 
++                  broadcast_interval, BROADCAST_INTERVAL_MIN_HOURS, BROADCAST_INTERVAL_MAX_HOURS); 
++        ok = false;
+     }
+     
+     // Check if config directory exists (warning only)
+-    struct stat st;
+-    if (stat(config_dir.c_str(), &st) != 0 || !S_ISDIR(st.st_mode)) {
+-        LOG_WARN("config_files_directory not found or not a directory: %s", config_dir.c_str());
+-        LOG_WARN("Config broadcasting will be disabled");
++    struct stat sb;
++    if (stat(config_dir.c_str(), &sb) != 0 || !S_ISDIR(sb.st_mode)) {
++        LOG_WARN("config_files_directory not accessible: %s", config_dir.c_str());
+     }
+ 
+-    if (!ok) LOG_ERROR("Configuration invalid.");
+-    else     LOG_INFO("Configuration validated.");
+     return ok;
+ }
+ 
+-// ===== UART + buffer service (TX/RX/CMD) =====
+-static int g_buffer_modulo = 0;
+-
+-
+-
+-static void service_uart_tx_buffer(pi_buffer* tx_buffer){
+-  // TX: flush to UART; throttle with radio wait to avoid overrun
+-  while (!tx_buffer->empty()) {
+-        char ch = tx_buffer->get_char();
+-        g_uart_manager->transmit_char(ch);
+-        if (++g_buffer_modulo == 128) {
+-            g_buffer_modulo = 0;
+-            g_radio_manager->wait_on_buffer_empty();
+-        }
+-    }
+-
+-}
+-
+-static void service_uart_and_buffers(pi_buffer* tx_buffer,
+-                                     pi_buffer* rx_buffer,
+-                                     pi_buffer* cmd_buffer)
+-{
+-
+-    service_uart_tx_buffer(tx_buffer);
+-
+-    // RX: pull from UART into rx_buffer
+-    while (g_uart_manager->get_input_count() != g_uart_manager->get_output_count()) {
+-        char ch = g_uart_manager->get_input_char();
+-        rx_buffer->add_char(ch);
+-    }
+-
+-    // CMD: last-wins semantics for radio settings
+-    bool radio_change = false;
+-    char radio_setting = 0;
+-    while (!cmd_buffer->empty()) {
+-        radio_setting = cmd_buffer->get_char();
+-        radio_change = true;
+-    }
+-    if (radio_change && (radio_setting & 0xC0) == 0x80) {
+-        int chan = radio_setting & 0x7;
+-        if (0 <= chan && chan <= 5) g_radio_manager->set_channel(chan);
+-    } else if (radio_change && (radio_setting & 0xC0) == 0xC0) {
+-        int pow = radio_setting & 0x7;
+-        if (5 <= pow && pow <= 7) g_radio_manager->set_tx_power(pow);
+-    }
+-}
+-
+-static void service_uart_tx_buffer_callback(){
+-    service_uart_and_buffers(tx_buffer,rx_buffer,cmd_buffer);
+-}
+-
++// ===== Main =====
+ int main(int argc, char** argv) {
+-    // ---- Parse command-line arguments ----
++    // Parse command-line options
+     CommandLineOptions options;
+     if (!parse_command_line(argc, argv, options)) {
+-        print_help(argv[0]);
+         return EXIT_FAILURE;
+     }
+     
+@@ -274,43 +241,31 @@ int main(int argc, char** argv) {
+         print_help(argv[0]);
+         return EXIT_SUCCESS;
+     }
++    
++    // Initialize logger
++    init_logger();
++    LOG_INFO("================================");
++    LOG_INFO("pi_server version %s", VERSION.c_str());
++    LOG_INFO("================================");
++    
++    if (options.monitor_mode) {
++        LOG_INFO("*** MONITOR MODE ENABLED ***");
++        LOG_INFO("*** No TX operations, no config broadcasts ***");
++    }
+ 
+-     // ---- Config first ----
+-    const std::string cfg_path = options.config_file;
+-    auto& cfg = ConfigManager::instance();
+-    if (!cfg.load(cfg_path)) {
+-        // Can't log yet, so use cerr
+-        std::cerr << "ERROR: Failed to load config file: " << cfg_path << std::endl;
++    // ---- Config load & validate ----
++    ConfigManager cfg(options.config_file);
++    if (!cfg.load()) {
++        LOG_ERROR("Unable to load config from %s, exiting.", options.config_file.c_str());
+         return EXIT_FAILURE;
+     }
++    LOG_INFO("Loaded config from: %s", options.config_file.c_str());
+ 
+-    // ---- Logger initialization with config ----
+-    std::string log_directory = cfg.get_log_directory();
+-    std::cout << "Initializing logger with directory: " << log_directory << std::endl;
+-    init_logger(log_directory);
+-
+-    // Log operating mode
+-    if (options.monitor_mode) {
+-        LOG_INFO("========================================");
+-        LOG_INFO("MONITOR MODE ENABLED");
+-        LOG_INFO("  - No TX responses will be sent");
+-        LOG_INFO("  - No config broadcasts will be sent");
+-        LOG_INFO("  - Receive-only operation");
+-        LOG_INFO("========================================");
++    if (!validate_config(cfg)) {
++        LOG_ERROR("Configuration validation failed. Exiting.");
++        return EXIT_FAILURE;
+     }
+-
+-    // Log the values we depend on
+-    LOG_INFO("Config loaded from: %s", cfg_path.c_str());
+-    LOG_INFO("system.version: %s", cfg.get("system.version", std::string(VERSION)).c_str());
+-    LOG_INFO("system.ping_file: %s", cfg.get("system.ping_file", std::string("/tmp/ping.txt")).c_str());
+-    LOG_INFO("system.radio_check_period_seconds: %d", cfg.get("system.radio_check_period_seconds", 28800));
+-    LOG_INFO("system.pi_buffer_size: %d", cfg.get("system.pi_buffer_size", 1048576));
+-    LOG_INFO("system.command_buffer_size: %d", cfg.get("system.command_buffer_size", 16));
+-    LOG_INFO("system.rf_channel_file: %s", cfg.get("system.rf_channel_file", std::string("/home/pi/channel.txt")).c_str());
+-    LOG_INFO("uart.timer_interval_us: %d", cfg.get("uart.timer_interval_us", 5000));
+-    LOG_INFO("uart.main_loop_delay_us: %d", cfg.get("uart.main_loop_delay_us", 10000));
+-
+-    if (!validate_config(cfg)) return EXIT_FAILURE;
++    LOG_INFO("Configuration validated successfully.");
+ 
+     // ---- Resolve runtime params from config ----
+     const std::string PING_FILE = cfg.get("system.ping_file", std::string("/tmp/ping.txt"));
+@@ -401,7 +356,7 @@ int main(int argc, char** argv) {
+ 
+     LOG_INFO("Starting radio...");
+     while (!g_radio_manager->start()) {
+-        Server_sleep_ms(200); // retry every 200 ms until radio ready
++        Server_sleep_ms(RADIO_STARTUP_RETRY_DELAY_MS);
+     }
+     LOG_INFO("Radio is OK!");
+ 
+@@ -426,7 +381,7 @@ int main(int argc, char** argv) {
+ 
+         // Periodic database flush (every hour)
+         auto flush_elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - database_flush_tstamp).count();
+-        if (flush_elapsed >= 3600) {  // 3600 seconds = 1 hour
++        if (flush_elapsed >= DATABASE_FLUSH_INTERVAL_SEC) {
+             if (g_sampleset_supervisor) {
+                 LOG_INFO("Performing hourly database flush");
+                 g_sampleset_supervisor->flush_database();
+@@ -434,16 +389,14 @@ int main(int argc, char** argv) {
+             }
+         }
+         
+-        // Check for config file changes (every 30 seconds)
++        // Check for config file changes (every 2 minutes)
+         auto config_elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - config_check_tstamp).count();
+-        if (config_elapsed >= 30) {  // Check every 30 seconds
+-            if (g_sampleset_supervisor) {
+-                if (g_sampleset_supervisor->check_and_reload_if_changed()) {
+-                    LOG_INFO("Configuration file changed - samplesets updated");
+-                    g_sampleset_supervisor->print_samplesets();
+-                }
+-                config_check_tstamp = std::chrono::system_clock::now();
++        if (config_elapsed >= CONFIG_FILE_CHECK_INTERVAL_SEC && !options.monitor_mode) {  
++            if (g_sampleset_supervisor->check_and_reload_if_changed()) {
++                LOG_INFO("Configuration file changed - samplesets updated");
++                g_sampleset_supervisor->print_samplesets();
+             }
++            config_check_tstamp = std::chrono::system_clock::now();
+         }
+ 
+         // First-time RF channel init (reads system.rf_channel_file)
+@@ -487,12 +440,12 @@ int main(int argc, char** argv) {
+ #endif
+ 
+         // Periodic ping file touch
+-        if (!(modulo_counter++ % 1500)) {
++        if (!(modulo_counter++ % PING_FILE_UPDATE_MODULO)) {
+             if (FILE* f = fopen(PING_FILE.c_str(), "w")) fclose(f);
+         }
+ 
+         // Loop delay
+-        if (LOOP_US > 0) Server_sleep_us(10);
++        if (LOOP_US > 0) Server_sleep_us(MAIN_LOOP_FALLBACK_DELAY_US);
+         else             std::this_thread::yield();
+     }
+ 
+@@ -512,4 +465,4 @@ int main(int argc, char** argv) {
+     delete g_radio_manager;
+     delete g_uart_manager;
+     return 0;
+-}
+\ No newline at end of file
++}

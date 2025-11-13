@@ -1,0 +1,79 @@
+# depslib dependency file v1.0
+1760025084 source:/home/pi/pi_server/filecontrol.cpp
+	"i/filecontrol.h"
+	<stdlib.h>
+	<math.h>
+	<time.h>
+	<sys/stat.h>
+	<sys/types.h>
+
+1760025084 /home/pi/pi_server/i/filecontrol.h
+	<iostream>
+	<fstream>
+	<vector>
+	<dirent.h>
+	<string.h>
+	<string>
+	<unistd.h>
+	<sys/time.h>
+	<sstream>
+
+1760042231 source:/home/pi/pi_server/main.cpp
+	<stdlib.h>
+	<iostream>
+	<string>
+	<chrono>
+	<bcm2835.h>
+	<sys/types.h>
+	<sys/stat.h>
+	<sys/ioctl.h>
+	<dirent.h>
+	<errno.h>
+	<stdio.h>
+	<vector>
+	<unistd.h>
+	<fcntl.h>
+	<termios.h>
+	<signal.h>
+	<sys/time.h>
+	<linux/serial.h>
+	"TS1X.h"
+	"pi_buffer.h"
+	"logger.h"
+
+1595016222 /usr/local/include/bcm2835.h
+	<stdint.h>
+	<stdlib.h>
+
+1760027292 /home/pi/pi_server/TS1X.h
+	<iostream>
+	"pi_buffer.h"
+
+1760025084 /home/pi/pi_server/pi_buffer.h
+	<stdlib.h>
+	<string.h>
+	<iostream>
+	<string>
+	<algorithm>
+	<fstream>
+	<climits>
+	<numeric>
+	<functional>
+
+1760025084 source:/home/pi/pi_server/pi_buffer.cpp
+	"pi_buffer.h"
+
+1760042233 source:/home/pi/pi_server/TS1X.cpp
+	"TS1X.h"
+	<cstdio>
+	<cctype>
+	"logger.h"
+
+1760041708 /home/pi/pi_server/logger.h
+	<stdio.h>
+	<stdarg.h>
+	<time.h>
+	<sys/time.h>
+	<string.h>
+	<pthread.h>
+

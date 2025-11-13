@@ -1,0 +1,62 @@
+12:03:59.994422 exec-cmd.c:243          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+12:04:00.013376 git.c:472               trace: built-in: git push
+12:04:00.014440 run-command.c:667       trace: run_command: GIT_DIR=.git git remote-https origin https://jgirardeau@bitbucket.org/uptimesolutions/pi_server.git
+12:04:00.014440 run-command.c:928       trace: start_command: git remote-https origin https://jgirardeau@bitbucket.org/uptimesolutions/pi_server.git
+12:04:00.026472 exec-cmd.c:243          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+12:04:00.029474 git.c:758               trace: exec: git-remote-https origin https://jgirardeau@bitbucket.org/uptimesolutions/pi_server.git
+12:04:00.029474 run-command.c:667       trace: run_command: git-remote-https origin https://jgirardeau@bitbucket.org/uptimesolutions/pi_server.git
+12:04:00.029474 run-command.c:928       trace: start_command: git-remote-https origin https://jgirardeau@bitbucket.org/uptimesolutions/pi_server.git
+12:04:00.045316 exec-cmd.c:243          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+12:04:00.547478 run-command.c:667       trace: run_command: 'git credential-manager get'
+12:04:00.547478 run-command.c:928       trace: start_command: 'C:/Program Files/Git/usr/bin/sh.exe' -c 'git credential-manager get' 'git credential-manager get'
+12:04:00.623049 exec-cmd.c:243          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+12:04:00.623049 git.c:758               trace: exec: git-credential-manager get
+12:04:00.623049 run-command.c:667       trace: run_command: git-credential-manager get
+12:04:00.623049 run-command.c:928       trace: start_command: git-credential-manager get
+12:04:00.811252 exec-cmd.c:243          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+12:04:00.831253 git.c:472               trace: built-in: git config --null --list
+12:04:00.831253 trace.c:414             performance: 0.002852700 s: git command: 'C:/Program Files/Git/mingw64/libexec/git-core\git.exe' config --null --list
+12:04:01.047968 exec-cmd.c:243          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+12:04:01.059972 git.c:472               trace: built-in: git version
+12:04:01.059972 trace.c:414             performance: 0.000153900 s: git command: 'C:/Program Files/Git/mingw64/libexec/git-core\git.exe' version
+12:04:01.072613 exec-cmd.c:243          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+12:04:01.077725 git.c:472               trace: built-in: git config --null --type=path http.https://bitbucket.org.sslCAInfo
+12:04:01.077725 trace.c:414             performance: 0.001194700 s: git command: 'C:/Program Files/Git/mingw64/libexec/git-core\git.exe' config --null --type=path http.https://bitbucket.org.sslCAInfo
+12:04:01.101970 exec-cmd.c:243          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+12:04:01.113890 git.c:472               trace: built-in: git config --null --type=path http.bitbucket.org.sslCAInfo
+12:04:01.113890 trace.c:414             performance: 0.001201000 s: git command: 'C:/Program Files/Git/mingw64/libexec/git-core\git.exe' config --null --type=path http.bitbucket.org.sslCAInfo
+12:04:01.123871 exec-cmd.c:243          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+12:04:01.139977 git.c:472               trace: built-in: git config --null --type=path http.sslCAInfo
+12:04:01.139977 trace.c:414             performance: 0.001614500 s: git command: 'C:/Program Files/Git/mingw64/libexec/git-core\git.exe' config --null --type=path http.sslCAInfo
+12:04:01.153028 exec-cmd.c:243          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+12:04:01.164072 git.c:472               trace: built-in: git config --null --type=path http.https://bitbucket.org.sslCAInfo
+12:04:01.164072 trace.c:414             performance: 0.001198500 s: git command: 'C:/Program Files/Git/mingw64/libexec/git-core\git.exe' config --null --type=path http.https://bitbucket.org.sslCAInfo
+12:04:01.178510 exec-cmd.c:243          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+12:04:01.188044 git.c:472               trace: built-in: git config --null --type=path http.bitbucket.org.sslCAInfo
+12:04:01.188044 trace.c:414             performance: 0.001260100 s: git command: 'C:/Program Files/Git/mingw64/libexec/git-core\git.exe' config --null --type=path http.bitbucket.org.sslCAInfo
+12:04:01.203881 exec-cmd.c:243          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+12:04:01.215101 git.c:472               trace: built-in: git config --null --type=path http.sslCAInfo
+12:04:01.215101 trace.c:414             performance: 0.001258800 s: git command: 'C:/Program Files/Git/mingw64/libexec/git-core\git.exe' config --null --type=path http.sslCAInfo
+12:04:01.231094 exec-cmd.c:243          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+12:04:01.232095 git.c:472               trace: built-in: git config --null --type=path http.https://bitbucket.org.cookieFile
+12:04:01.232095 trace.c:414             performance: 0.001286100 s: git command: 'C:/Program Files/Git/mingw64/libexec/git-core\git.exe' config --null --type=path http.https://bitbucket.org.cookieFile
+12:04:01.251310 exec-cmd.c:243          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+12:04:01.265893 git.c:472               trace: built-in: git config --null --type=path http.bitbucket.org.cookieFile
+12:04:01.265893 trace.c:414             performance: 0.001227800 s: git command: 'C:/Program Files/Git/mingw64/libexec/git-core\git.exe' config --null --type=path http.bitbucket.org.cookieFile
+12:04:01.279031 exec-cmd.c:243          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+12:04:01.289056 git.c:472               trace: built-in: git config --null --type=path http.cookieFile
+12:04:01.291061 trace.c:414             performance: 0.001201000 s: git command: 'C:/Program Files/Git/mingw64/libexec/git-core\git.exe' config --null --type=path http.cookieFile
+12:04:01.889629 trace.c:414             performance: 1.259301500 s: git command: 'C:\Program Files\Git\mingw64\libexec\git-core\git.exe' credential-manager get
+12:04:02.162167 run-command.c:667       trace: run_command: 'git credential-manager store'
+12:04:02.163265 run-command.c:928       trace: start_command: 'C:/Program Files/Git/usr/bin/sh.exe' -c 'git credential-manager store' 'git credential-manager store'
+12:04:02.232592 exec-cmd.c:243          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+12:04:02.232592 git.c:758               trace: exec: git-credential-manager store
+12:04:02.232592 run-command.c:667       trace: run_command: git-credential-manager store
+12:04:02.232592 run-command.c:928       trace: start_command: git-credential-manager store
+12:04:02.325987 exec-cmd.c:243          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+12:04:02.341746 git.c:472               trace: built-in: git config --null --list
+12:04:02.341746 trace.c:414             performance: 0.001667300 s: git command: 'C:/Program Files/Git/mingw64/libexec/git-core\git.exe' config --null --list
+12:04:02.467033 trace.c:414             performance: 0.224180700 s: git command: 'C:\Program Files\Git\mingw64\libexec\git-core\git.exe' credential-manager store
+12:04:02.483088 trace.c:414             performance: 2.452868600 s: git command: git remote-https origin https://jgirardeau@bitbucket.org/uptimesolutions/pi_server.git
+12:04:02.490991 trace.c:414             performance: 2.480066100 s: git command: 'C:\Program Files\Git\mingw64\bin\git.exe' push
+Everything up-to-date
