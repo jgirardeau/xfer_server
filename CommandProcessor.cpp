@@ -11,7 +11,7 @@
 std::map<char, CommandInfo> CommandProcessor::init_command_registry() {
     std::map<char, CommandInfo> registry;
     
-    // BASE â†’ UNIT Commands (MAC = 0xFFFFFFFF)
+    // BASE -> UNIT Commands (MAC = 0xFFFFFFFF)
     registry[CMD_WAKEUP] = {CMD_WAKEUP, "WAKE", "Wake/Activate command", PacketDirection::BASE_TO_UNIT};
     registry[CMD_WAKEUP_LC] = {CMD_WAKEUP_LC, "WAKE", "Wake/Activate command (lowercase)", PacketDirection::BASE_TO_UNIT};
     registry[CMD_SAMPLE_DATA] = {CMD_SAMPLE_DATA, "SAMPLE_DATA", "Sample data command", PacketDirection::BASE_TO_UNIT};
@@ -25,14 +25,14 @@ std::map<char, CommandInfo> CommandProcessor::init_command_registry() {
     registry[CMD_INITIALIZE] = {CMD_INITIALIZE, "INIT", "Initialize/Probe command", PacketDirection::BASE_TO_UNIT};
     registry[CMD_INITIALIZE_LC] = {CMD_INITIALIZE_LC, "INIT", "Initialize/Probe command (lowercase)", PacketDirection::BASE_TO_UNIT};
     
-    // UNIT â†’ BASE Responses (specific MAC address)
+    // UNIT -> BASE Responses (specific MAC address)
     registry[CMD_ACK_INIT] = {CMD_ACK_INIT, "ACK_INIT", "ACK response to Initialize command with unit info", PacketDirection::UNIT_TO_BASE};
     registry[CMD_DATA_UPLOAD] = {CMD_DATA_UPLOAD, "DATA_UPLOAD", "Data upload segment", PacketDirection::UNIT_TO_BASE};
     registry[CMD_DATA_RESPONSE] = {CMD_DATA_RESPONSE, "DATA_RSP", "Data response with sensor readings", PacketDirection::UNIT_TO_BASE};
     registry[CMD_DATA_RESPONSE_LC] = {CMD_DATA_RESPONSE_LC, "DATA_RSP", "Data response with sensor readings (lowercase)", PacketDirection::UNIT_TO_BASE};
     registry[CMD_ACK] = {CMD_ACK, "ACK", "Acknowledgment response", PacketDirection::UNIT_TO_BASE};
     registry[CMD_ACK_LC] = {CMD_ACK_LC, "ACK", "Acknowledgment response (lowercase)", PacketDirection::UNIT_TO_BASE};
-    //  other BASE â†’ UNIT commands:
+    //  other BASE -> UNIT commands:
     registry[CMD_UPLOAD_INIT] = {CMD_UPLOAD_INIT, "UPLOAD_INIT", "Upload initialization request (0x51)", PacketDirection::BASE_TO_UNIT};
     registry[CMD_UPLOAD_INIT_LC] = {CMD_UPLOAD_INIT_LC, "UPLOAD_INIT", "Upload initialization request (0x51, lowercase)", PacketDirection::BASE_TO_UNIT};
     registry[CMD_UPLOAD_PARTIAL] = {CMD_UPLOAD_PARTIAL, "UPLOAD_PARTIAL", "Upload partial data request (0x55)", PacketDirection::BASE_TO_UNIT};
@@ -67,8 +67,8 @@ const CommandInfo* CommandProcessor::get_command_info(char command_code) {
 
 std::string CommandProcessor::get_direction_string(PacketDirection dir) {
     switch (dir) {
-        case PacketDirection::BASE_TO_UNIT: return "BASEâ†’UNIT";
-        case PacketDirection::UNIT_TO_BASE: return "UNITâ†’BASE";
+        case PacketDirection::BASE_TO_UNIT: return "BASE->UNIT";
+        case PacketDirection::UNIT_TO_BASE: return "UNIT->BASE";
         default: return "UNKNOWN";
     }
 }
@@ -108,7 +108,7 @@ bool CommandProcessor::is_header_info_present(const unsigned char* data) {
 
 PacketDirection CommandProcessor::determine_direction(const unsigned char* data, char command_code) {
     // Primary check: MAC address
-    // BASEâ†’UNIT always uses broadcast MAC (0xFFFFFFFF) in bytes 3-6
+    // BASE->UNIT always uses broadcast MAC (0xFFFFFFFF) in bytes 3-6
     uint32_t source_mac = ((uint32_t)data[3] << 24) |
                           ((uint32_t)data[4] << 16) |
                           ((uint32_t)data[5] << 8) |
